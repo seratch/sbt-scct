@@ -1,23 +1,48 @@
-organization := "reaktor"
+organization := "com.github.seratch.reaktor"
 
 name := "sbt-scct"
 
-version := "0.2-SNAPSHOT"
-
-//scalaVersion := "2.10.0-RC3" (not yet, sbt itself uses 2.9)
-scalaVersion := "2.9.2"
-
-crossScalaVersions := Seq("2.10.0-RC3", "2.9.2", "2.9.1-1", "2.9.1", "2.9.0-1", "2.9.0")
+version := "0.2.001"
 
 sbtPlugin := true
 
-// Load scct from remote:
-resolvers += "scct-github-repository" at "http://mtkopone.github.com/scct/maven-repo"
+resolvers += "sonatype releases" at "http://oss.sonatype.org/content/repositories/releases"
 
-// For local development:
-// resolvers += "scct-repository" at "file:///Users/mtkopone/dev/scct-root/gh-pages/maven-repo"
+libraryDependencies += "com.github.seratch.reaktor" %% "scct" % "0.2.001"
 
-libraryDependencies += "reaktor" %% "scct" % "0.2-SNAPSHOT"
+publishTo <<= version { (v: String) =>
+  val nexus = "https://oss.sonatype.org/"
+  if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
+  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
 
-publishTo := Some(Resolver.file("file",  new File("../gh-pages/maven-repo")))
+testOptions in Test <+= (scalaVersion in Test) map { (scalaVer) =>
+  Tests.Setup { () => System.setProperty("scct-test-scala-version", scalaVer) }
+}
+
+publishMavenStyle := true
+
+publishArtifact in Test := false
+
+pomIncludeRepository := { x => false }
+
+pomExtra := <url>http://seratch.github.com/scalikejdbc</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>git@github.com:seratch/scct.git</url>
+    <connection>scm:git:git@github.com:seratch/scct.git</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>mtkopone</id>
+      <name>Mikko Koponen</name>
+      <url>http://mtkopone.github.com</url>
+    </developer>
+  </developers>
 

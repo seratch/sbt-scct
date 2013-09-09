@@ -18,18 +18,14 @@ object ScctPlugin extends Plugin {
 
       ivyConfigurations ++= Seq(Scct, ScctTest),
 
-      // Local dev:
-      // resolvers += "scct-repository" at "file:///Users/mtkopone/dev/scct-root/gh-pages/maven-repo",
-      // Actual usage:
-      resolvers += "scct-repository" at "http://mtkopone.github.com/scct/maven-repo",
-
-      libraryDependencies += "reaktor" %% "scct" % "0.2-SNAPSHOT" % "scct",
+      // Note: https://github.com/mtkopone/scct/issues/54
+      libraryDependencies += "com.github.seratch.reaktor" %% "scct" % "0.2.001" % "provided",
 
       sources in Scct <<= (sources in Compile),
       sourceDirectory in Scct <<= (sourceDirectory in Compile),
 
       scalacOptions in Scct <++= (name in Scct, baseDirectory in Scct, update) map { (n, b, report) =>
-        val pluginClasspath = report matching configurationFilter("scct")
+        val pluginClasspath = report matching configurationFilter("provided")
         if (pluginClasspath.isEmpty) throw new Exception("Fatal: scct not in libraryDependencies. Use e.g. <+= or <++= instead of <<=")
         Seq(
           "-Xplugin:" + pluginClasspath.head.getAbsolutePath,
