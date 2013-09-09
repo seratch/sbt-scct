@@ -1,24 +1,19 @@
-sbt-scct
-========
+## A fork of sbt-scct
 
-sbt integration to scct
+sbt 0.12 and 0.13 are supported. Available on sonatype oss and maven central repository.
 
+## Usage
 
-help, instructions and usage
-===========================
+Basically same as original.
 
-* http://mtkopone.github.com/scct
-* http://github.com/mtkopone/scct
+### project/plugins.sbt
 
+```scala
+addSbtPlugin("com.github.seratch.reaktor" % "sbt-scct" % "0.2.001")
+```
 
-relevant branches
-=================
+### build.sbt
 
-> master
-
-sbt 0.12, scala 2.9, and improving.
-
-> sbt-0.7.7
-
-Ye really olde version of sbt.
-
+```
+ScctPlugin.instrumentSettings
+```
